@@ -1,11 +1,5 @@
 // **Display/UI**
 
-
-//2.left click on tiles ( reveal a tile)
-//3. rigth click on tiles ( mark a tile)
-//4. check for win or lose
-
-
 import {
   TILE_STATUSES, 
   createBoard, 
@@ -21,17 +15,19 @@ const minesLeftText = document.querySelector("[data-mines-count]");
 
 //Populate a board with tiles/mines
 const board = createBoard(BOARD_SIZE, NUMBER_OF_MINES);
-
 const boardElement = document.querySelector(".board");
 const textMessage= document.querySelector(".subtext");
+
 
 board.forEach(row => {
     row.forEach(tile => {
       boardElement.append(tile.element);
+      //left click on tiles ( reveal a tile)
       tile.element.addEventListener('click', () => {
         revealTile(board, tile);
         checkGameEnd();
       });
+      //rigth click on tiles ( mark a tile)
       tile.element.addEventListener( 'contextmenu', e => {
         e.preventDefault();
         markTile(tile);
@@ -43,6 +39,7 @@ board.forEach(row => {
 boardElement.style.setProperty( "--size", BOARD_SIZE);
 minesLeftText.textContent = NUMBER_OF_MINES;
 
+//show how many mines you marked
 function listMinesLeft() {
   const markedTilesCount = board.reduce((count, row) => {
     return count + row.filter(tile => tile.status === TILE_STATUSES.MARKED).length;
@@ -50,6 +47,7 @@ function listMinesLeft() {
   minesLeftText.textContent = NUMBER_OF_MINES - markedTilesCount;
 }
 
+//check for win or lose
 function checkGameEnd() {
   const win = checkWin(board);
   const lose = checkLose(board);
